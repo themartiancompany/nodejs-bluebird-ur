@@ -1,23 +1,28 @@
 # SPDX-License-Identifier: AGPL-3.0
 
-#    ----------------------------------------------------------------------
+#    -----------------------------------------------------
 #    Copyright © 2024, 2025, 2026  Pellegrino Prevete
 #
 #    All rights reserved
-#    ----------------------------------------------------------------------
+#    -----------------------------------------------------
 #
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+#    This program is free software: you can redistribute
+#    it and/or modify it under the terms of the
+#    GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of
+#    the License, or (at your option) any later version.
 #
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
+#    This program is distributed in the hope that it
+#    will be useful, but WITHOUT ANY WARRANTY;
+#    without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#    See the GNU Affero General Public License for
+#    more details.
 #
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#    You should have received a copy of the
+#    GNU Affero General Public License
+#    along with this program.
+#    If not, see <https://www.gnu.org/licenses/>.
 
 
 # Maintainers:
@@ -67,7 +72,7 @@ if [[ ! -v "${_archive_format}" ]]; then
     fi
   fi
 fi
-_pkg=opfs
+_pkg=yargs
 pkgbase="nodejs-${_pkg}"
 pkgname=(
   "${pkgbase}"
@@ -79,15 +84,18 @@ _pkgdesc=(
   "OPFS Tools modules."
 )
 pkgdesc="${_pkgdesc[*]}"
-_commit="8560a11f42a0e0208e7e915daca6b811dfea860d"
-_pkgver="2.0.4"
-pkgver="2.0.5"
+_commit="8878a894111e3fe7c98d84af546c0f34fa017492"
+pkgver="18.1.0"
+_pkgver="v${pkgver}"
 pkgrel=1
 arch=(
   'any'
 )
 _http="https://${_git_http}.com"
-_ns="themartiancompany"
+if [[ ! -v "_ns" ]]; then
+  _ns="${_pkg}"
+  _ns="themartiancompany"
+fi
 url="${_http}/${_ns}/${_pkg}"
 license=(
   'AGPL3'
@@ -109,15 +117,28 @@ elif [[ "${_npm}" == "false" ]]; then
   _tag_name="commit"
 fi
 _tarname="${_pkg}-${_tag}"
-_npm_tarname="${_ns}-${_pkg}-${_tag}"
+_npm_tarname="${_pkg}-${_tag}"
 _tarfile="${_tarname}.${_archive_format}"
 _npm_tarfile="${_npm_tarname}.${_archive_format}"
-_sum="26d4230e0bff3acbd8618eb34aeb93f08a94281e9ac0c54f3f8758ad5225d2d1"
-_sig_sum="296c4fb420c0275d01d095ea9cbcb49ecb25791346d26699c512c073634f6ebb"
 _bundle_sum="e7bf622ac1afab6ebdd14f6ff621874d24aca9e4899f1fa7616a84faea4ed81c"
 _bundle_sig_sum="bdf198594304ccfd8d262ffa4ff5f1a0511ee198a73b1c74ed227f346eda4998"
-_npm_sum="e6f8f5b672465be2bfac83de21f575578612afe510b8fc059e1ce839c4cdc021"
-_npm_sig_sum="39f80370d9cf9b32cb9a41b9976ad9a8915ba7c4350ba24b7729b39af6ba3d39"
+_github_sum="153c1282ff16cbee24be00c3b54f8e72c390c4d98e4aa425fabfbd8854f5a201"
+_github_sig_sum="5261ddfcf945e4d3f3a63ca2b074197d73a528638534554a8c81a66df07d0757"
+_npm_sum="2bbc63973e98118422e316d8ae90fe4f07114ffc46d8d20523f2d0589b232252"
+_npm_sig_sum="58c5b26f8fec42e547e5bee0878b28852fe062403e69bd2c71225d9cac6a8516"
+if [[ "${_git}" == "false" ]]; then
+  if [[ "${_npm}" == "false" && \
+        "${_git_service}" == "github" ]]; then
+    _sum="${_github_sum}"
+    _sig_sum="${_github_sig_sum}"
+  elif [[ "${_npm}" == "true" ]]; then
+    _sum="${_npm_sum}"
+    _sig_sum="${_npm_sig_sum}"
+  fi
+elif [[ "${_git}" == "true" ]]; then
+  _sum="${_bundle_sum}"
+  _sig_sum="${_bundle_sig_sum}"
+fi
 # Truocolo
 _evmfs_ns="0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b"
 # Dvorak
@@ -165,7 +186,7 @@ if [[ "${_evmfs}" == "true" ]]; then
   )
 elif [[ "${_evmfs}" == "false" ]]; then
   if [[ "${_npm}" == "true" ]]; then
-    _uri="${_npm_http}/@${_ns}/${_pkg}/-/${_tarfile}"
+    _uri="${_npm_http}/${_pkg}/-/${_tarfile}"
   elif [[ "${_npm}" == "false" ]]; then
     if [[ "${_tag_name}" == 'pkgver' ]]; then
       if [[ "${_git_http}" == "gitlab" ]]; then
@@ -238,12 +259,12 @@ build() {
     npm \
       pack
     mv \
-      "${_ns}-${_pkg}-${_pkgver}.tgz" \
+      "${_pkg}-${_pkgver}.tgz" \
       "${srcdir}"
   fi
 }
 
-package_nodejs-opfs() {
+package_nodejs-yargs() {
   local \
     _npm_options=() \
     _find_opts=()
@@ -266,7 +287,7 @@ package_nodejs-opfs() {
   npm \
     install \
     "${_npm_options[@]}" \
-    "${srcdir}/${_ns}-${_pkg}-${_pkgver}.tgz"
+    "${srcdir}/${_pkg}-${_pkgver}.tgz"
   rm \
     -fr \
       "${pkgdir}/usr/etc"
@@ -277,4 +298,3 @@ package_nodejs-opfs() {
 }
 
 # vim:set sw=2 sts=-1 et:
-
