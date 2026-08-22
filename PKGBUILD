@@ -53,7 +53,7 @@ if [[ "${_os}" == "Android" ]]; then
   _node="nodejs-lts"
 fi
 if [[ ! -v "_npm" ]]; then
-  _npm="false"
+  _npm="true"
 fi
 if [[ ! -v "_git" ]]; then
   _git="false"
@@ -127,8 +127,8 @@ _github_sig_sum="5261ddfcf945e4d3f3a63ca2b074197d73a528638534554a8c81a66df07d075
 _npm_sum="2bbc63973e98118422e316d8ae90fe4f07114ffc46d8d20523f2d0589b232252"
 _npm_sig_sum="58c5b26f8fec42e547e5bee0878b28852fe062403e69bd2c71225d9cac6a8516"
 if [[ "${_git}" == "false" ]]; then
-  if [[ "${_npm}" == "false" && \
-        "${_git_service}" == "github" ]]; then
+  if [[ "${_npm}" == "false" ]] && \
+     [[ "${_git_service}" == "github" ]]; then
     _sum="${_github_sum}"
     _sig_sum="${_github_sig_sum}"
   elif [[ "${_npm}" == "true" ]]; then
@@ -229,35 +229,16 @@ validpgpkeys=(
 )
 
 build() {
-  local \
-    _files=()
-  _files+=(
-    "AUTHORS.rst"
-    "COPYING"
-    "README.md"
-    "eslint.config.mjs"
-    "fs-worker"
-    "fs-worker.webpack.config.cjs"
-    "man"
-    "opfs"
-    "package.json"
-  )
   if [[ "${_npm}" == "false" ]]; then
     cd \
       "${_tarname}"
-    mkdir \
-      -p \
-      "build"
-    cp \
-      -r \
-      "${_files[@]}" \
-      "build"
-    cd \
-      "build"
     npm \
-      install
+      install \
+      "." || \
+      true
     npm \
-      pack
+      pack || \
+      true 
     mv \
       "${_pkg}-${_pkgver}.tgz" \
       "${srcdir}"
@@ -287,7 +268,7 @@ package_nodejs-yargs() {
   npm \
     install \
     "${_npm_options[@]}" \
-    "${srcdir}/${_pkg}-${_pkgver}.tgz"
+    "${srcdir}/${_pkg}-${pkgver}.tgz"
   rm \
     -fr \
       "${pkgdir}/usr/etc"
