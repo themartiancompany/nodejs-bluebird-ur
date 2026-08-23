@@ -1163,9 +1163,9 @@ jobs:
             ${{ github.event.release.upload_url }}
             # ${{ steps.create_release.outputs.upload_url }}
           asset_path:
-            "nodejs-yargs-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
+            "nodejs-bluebird-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
           asset_name:
-            "dogeos-android-nodejs-yargs-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
+            "dogeos-android-nodejs-bluebird-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
           asset_content_type:
             application/gzip
   arch_release:
@@ -1961,9 +1961,9 @@ jobs:
             ${{ github.event.release.upload_url }}
             # ${{ steps.create_release.outputs.upload_url }}
           asset_path:
-            "nodejs-yargs-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
+            "nodejs-bluebird-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
           asset_name:
-            "dogeos-gnu-nodejs-yargs-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
+            "dogeos-gnu-nodejs-bluebird-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
           asset_content_type:
             application/gzip
   msys2_release:
@@ -2495,9 +2495,9 @@ jobs:
             ${{ github.event.release.upload_url }}
             # ${{ steps.create_release.outputs.upload_url }}
           asset_path:
-            "nodejs-yargs-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
+            "nodejs-bluebird-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
           asset_name:
-            "dogeos-windows-nodejs-yargs-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
+            "dogeos-windows-nodejs-bluebird-${{ steps.version.outputs.version }}-any.pkg.tar.xz"
           asset_content_type:
             application/gzip
 

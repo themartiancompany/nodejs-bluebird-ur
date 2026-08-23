@@ -72,20 +72,17 @@ if [[ ! -v "${_archive_format}" ]]; then
     fi
   fi
 fi
-_pkg=yargs
+_pkg=bluebird
 pkgbase="nodejs-${_pkg}"
 pkgname=(
   "${pkgbase}"
 )
 _pkgdesc=(
-  "Browser-compatible 'fs' module"
-  "obtained combining the"
-  "'Happy OPFS' and the"
-  "OPFS Tools modules."
+  "Javascript promise library."
 )
 pkgdesc="${_pkgdesc[*]}"
-_commit="8878a894111e3fe7c98d84af546c0f34fa017492"
-pkgver="18.1.0"
+_commit="df70847b651c7fdc46f774dc6ab5e709d7e005f3"
+pkgver="3.7.2"
 _pkgver="v${pkgver}"
 pkgrel=1
 arch=(
@@ -93,7 +90,7 @@ arch=(
 )
 _http="https://${_git_http}.com"
 if [[ ! -v "_ns" ]]; then
-  _ns="${_pkg}"
+  _ns="petkaantonov"
   _ns="themartiancompany"
 fi
 url="${_http}/${_ns}/${_pkg}"
@@ -122,10 +119,10 @@ _tarfile="${_tarname}.${_archive_format}"
 _npm_tarfile="${_npm_tarname}.${_archive_format}"
 _bundle_sum="e7bf622ac1afab6ebdd14f6ff621874d24aca9e4899f1fa7616a84faea4ed81c"
 _bundle_sig_sum="bdf198594304ccfd8d262ffa4ff5f1a0511ee198a73b1c74ed227f346eda4998"
-_github_sum="153c1282ff16cbee24be00c3b54f8e72c390c4d98e4aa425fabfbd8854f5a201"
-_github_sig_sum="5261ddfcf945e4d3f3a63ca2b074197d73a528638534554a8c81a66df07d0757"
-_npm_sum="2bbc63973e98118422e316d8ae90fe4f07114ffc46d8d20523f2d0589b232252"
-_npm_sig_sum="58c5b26f8fec42e547e5bee0878b28852fe062403e69bd2c71225d9cac6a8516"
+_github_sum="c2d205bf4feecf38c0036103dfb10ee17fffa02a5b0b05343c26c89b18049abc"
+_github_sig_sum="39259d1730f7561e710abd97b139f3be3f1a228d15af3beaef7e5415bced1f51"
+_npm_sum="c68b0b2a44f58961277e975053c6f0053d93bac8f68cef9dae596f2a04806ddc"
+_npm_sig_sum="e2fc2012b491a7c9be67833a49e6960546b0f222bbf41e51ad34f9e5c9a52e1a"
 if [[ "${_git}" == "false" ]]; then
   if [[ "${_npm}" == "false" ]] && \
      [[ "${_git_service}" == "github" ]]; then
@@ -245,10 +242,25 @@ build() {
   fi
 }
 
-package_nodejs-yargs() {
+_usr_get() {
+  local \
+    _bin
+  _bin="$(
+    dirname \
+      "$(command \
+           -v \
+	   "env")")"
+  dirname \
+    "${_bin}"
+}
+
+package_nodejs-bluebird() {
   local \
     _npm_options=() \
-    _find_opts=()
+    _find_opts=() \
+    _usr
+  _usr="$(
+    _usr_get)"
   _npm_options=(
     -g 
     # --user 
@@ -276,6 +288,10 @@ package_nodejs-yargs() {
   find \
     "${pkgdir}/usr" \
     "${_find_opts[@]}"
+  ln \
+    -s \
+    "${_usr}/lib/node_modules/${_pkg}" \
+    "${pkgdir}/usr/lib/${_pkg}"
 }
 
 # vim:set sw=2 sts=-1 et:

@@ -20,7 +20,7 @@
 [comment]: <> (See the GNU Affero General Public License)
 [comment]: <> (for more details.)
 
-# `nodejs-yargs`
+# `nodejs-bluebird`
 
 universal recipe for
 [user repo](
