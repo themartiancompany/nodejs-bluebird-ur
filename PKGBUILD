@@ -81,6 +81,7 @@ _pkgdesc=(
   "Javascript promise library."
 )
 pkgdesc="${_pkgdesc[*]}"
+_bundle_commit="c220cfe480868e2f5c5de4fe8bb3b04b97588d7f"
 _commit="df70847b651c7fdc46f774dc6ab5e709d7e005f3"
 pkgver="3.7.2"
 _pkgver="v${pkgver}"
@@ -117,8 +118,8 @@ _tarname="${_pkg}-${_tag}"
 _npm_tarname="${_pkg}-${_tag}"
 _tarfile="${_tarname}.${_archive_format}"
 _npm_tarfile="${_npm_tarname}.${_archive_format}"
-_bundle_sum="e7bf622ac1afab6ebdd14f6ff621874d24aca9e4899f1fa7616a84faea4ed81c"
-_bundle_sig_sum="bdf198594304ccfd8d262ffa4ff5f1a0511ee198a73b1c74ed227f346eda4998"
+_bundle_sum="dd88ceee745c8cda19eece6bdae221bcee7484f793eebaa231c70613563f295d"
+_bundle_sig_sum="a51450f6d00cf422e1a7f99f7fe45223039029c0530571e1c90f111c09efa9ae"
 _github_sum="c2d205bf4feecf38c0036103dfb10ee17fffa02a5b0b05343c26c89b18049abc"
 _github_sig_sum="39259d1730f7561e710abd97b139f3be3f1a228d15af3beaef7e5415bced1f51"
 _npm_sum="c68b0b2a44f58961277e975053c6f0053d93bac8f68cef9dae596f2a04806ddc"
@@ -161,7 +162,7 @@ sha256sums=()
 if [[ "${_evmfs}" == "true" ]]; then
   if [[ "${_npm}" == "true" ]]; then
     _uri="${_evmfs_npm_uri}"
-    _sum="${_evmfs_npm_sum}"
+    _sum="${_npm_sum}"
     _sig_src="${_evmfs_npm_uri}"
     _sig_sum="${_npm_sig_sum}"
   elif [[ "${_npm}" == "false" ]]; then
@@ -224,6 +225,60 @@ validpgpkeys=(
   #   <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
   '12D8E3D7888F741E89F86EE0FEC8567A644F1D16'
 )
+
+_git_unbundle() {
+  local \
+    _tarname="${1}" \
+    _bundle \
+    _repo \
+    _msg=()
+  _bundle="${srcdir}/${_tarname}.bundle"
+  _repo="${srcdir}/${_tarname}"
+  _msg=(
+    "Cloning '${_bundle}' into '${_repo}'."
+  )
+  msg \
+    "${_msg[*]}"
+  git \
+    clone \
+      "${_bundle}" \
+      "${_repo}" || \
+  git \
+    -C \
+      "${_repo}" \
+      pull || \
+  true
+}
+
+prepare() {
+  local \
+    _bash_files=() \
+    _file \
+    _os \
+    _like \
+    _src
+  _like="never-gonna-give-you-up"
+  if [[ "${_evmfs}" == "true" ]]; then
+    if [[ "${_git}" == "false" ]]; then
+      ur \
+        "${_like}"
+    elif [[ "${_git}" == "true" ]]; then
+      _git_unbundle \
+        "${_tarname}"
+    fi
+  fi
+  _os="$(
+    uname \
+      -o)"
+  if [[ "${_archive_format}" == "git" ]]; then
+    mv \
+      "${srcdir}/${_tarfile}" \
+      "${srcdir}/${_tarname}"
+  else
+    echo \
+      "Archive format: '${_archive_format}'"
+  fi
+}
 
 build() {
   if [[ "${_npm}" == "false" ]]; then
