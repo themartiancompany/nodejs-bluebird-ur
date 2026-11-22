@@ -85,7 +85,7 @@ _bundle_commit="c220cfe480868e2f5c5de4fe8bb3b04b97588d7f"
 _commit="df70847b651c7fdc46f774dc6ab5e709d7e005f3"
 pkgver="3.7.2"
 _pkgver="v${pkgver}"
-pkgrel=1
+pkgrel=2
 arch=(
   'any'
 )

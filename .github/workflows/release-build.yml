@@ -1978,6 +1978,12 @@ jobs:
                 x86_64,
               arch:
                 x86_64 }
+          - { sys:
+                ucrt64,
+              env:
+                x86_64,
+              arch:
+                x86_64 }
     runs-on:
       windows-latest
     defaults:
